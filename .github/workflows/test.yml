@@ -38,6 +38,19 @@ jobs:
       - name: test (race)
         working-directory: ${{ matrix.module }}
         run: go test -race -coverprofile=cover.out ./...
+      - name: coverage floor
+        working-directory: ${{ matrix.module }}
+        run: |
+          case "${{ matrix.module }}" in
+            ".")              floor=90 ;;
+            "contrib/zap")    floor=88 ;;
+            "contrib/sentry") floor=88 ;;
+            *)                floor=95 ;;
+          esac
+          pct=$(go tool cover -func=cover.out | tail -1 | awk '{gsub(/%/,"",$3); print $3}')
+          echo "coverage: ${pct}%  floor: ${floor}%"
+          awk -v p="$pct" -v f="$floor" 'BEGIN{ exit (p+0 < f+0) }' \
+            || { echo "::error::coverage ${pct}% below floor ${floor}%"; exit 1; }
       - name: alloc-regression gate (no race)
         if: matrix.module == '.'
         run: go test -run 'TestZeroAlloc' -count=1 .

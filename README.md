@@ -457,6 +457,7 @@ The core module has **no third-party dependencies**. Heavy integrations live in 
 - [Processors & the pipeline](./docs/processors.md)
 - [Migration guide](./docs/migration.md)
 - [Performance](./docs/performance.md)
+- [Test coverage report](./COVERAGE.md)
 - [API reference (pkg.go.dev)](https://pkg.go.dev/github.com/ubgo/logger)
 
 ## License
