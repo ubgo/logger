@@ -94,6 +94,32 @@ func Any(key string, v any) Field {
 	return Field{Key: key, knd: kindAny, any: v}
 }
 
+// Value boxes the field value into an interface. This is the public accessor
+// for adapter/sink authors outside this package (encoders use the unboxed
+// accessors below on the hot path). nil-error fields return a nil any.
+func (f Field) Value() any {
+	switch f.knd {
+	case kindString:
+		return f.str
+	case kindInt64:
+		return int64(f.num)
+	case kindUint64:
+		return f.num
+	case kindFloat64:
+		return float64frombits(f.num)
+	case kindBool:
+		return f.num != 0
+	case kindDuration:
+		return time.Duration(f.num)
+	case kindTime:
+		return time.Unix(0, int64(f.num))
+	case kindError:
+		return f.errVal()
+	default:
+		return f.any
+	}
+}
+
 // --- accessors used by encoders --------------------------------------------
 
 func (f Field) string() string          { return f.str }
