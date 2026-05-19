@@ -12,6 +12,12 @@ slogtest-conformant, all four plan phases landed. See sections below.
 
 ## [Unreleased]
 
+### Added — docs & final adapter
+
+- `Example_*` tests (godoc / pkg.go.dev) — compile-checked usage docs
+  for the core API, FingersCrossed, redaction, spans, templates, slog.
+- **contrib/phuslu**: forward records into a phuslu/log writer.
+
 ### Added — engines & adapters
 
 - **DisruptorTransport**: lock-free async engine — Vyukov bounded MPMC
