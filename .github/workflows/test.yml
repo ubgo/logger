@@ -1,4 +1,4 @@
-name: CI
+name: test
 
 on:
   push:
@@ -44,15 +44,3 @@ jobs:
       - name: gofmt
         working-directory: ${{ matrix.module }}
         run: test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "stable"
-      # golangci-lint-action@v7 understands the v2 `.golangci.yml` schema.
-      - uses: golangci/golangci-lint-action@v7
-        with:
-          version: latest

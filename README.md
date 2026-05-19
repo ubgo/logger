@@ -1,10 +1,6 @@
 # ubgo/logger — the last Go logging library you'll need
 
-[![CI](https://github.com/ubgo/logger/actions/workflows/ci.yml/badge.svg)](https://github.com/ubgo/logger/actions/workflows/ci.yml)
-[![Go Reference](https://pkg.go.dev/badge/github.com/ubgo/logger.svg)](https://pkg.go.dev/github.com/ubgo/logger)
-[![Go Report Card](https://goreportcard.com/badge/github.com/ubgo/logger)](https://goreportcard.com/report/github.com/ubgo/logger)
-[![Go 1.24+](https://img.shields.io/badge/go-1.24%2B-00ADD8.svg)](https://go.dev/dl/)
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
+[![Go Reference](https://pkg.go.dev/badge/github.com/ubgo/logger.svg)](https://pkg.go.dev/github.com/ubgo/logger) [![Go Report Card](https://goreportcard.com/badge/github.com/ubgo/logger)](https://goreportcard.com/report/github.com/ubgo/logger) [![test](https://github.com/ubgo/logger/actions/workflows/test.yml/badge.svg)](https://github.com/ubgo/logger/actions/workflows/test.yml) [![lint](https://github.com/ubgo/logger/actions/workflows/lint.yml/badge.svg)](https://github.com/ubgo/logger/actions/workflows/lint.yml) ![coverage](https://img.shields.io/badge/coverage-87%25-brightgreen) [![tag](https://img.shields.io/github/v/tag/ubgo/logger?sort=semver)](https://github.com/ubgo/logger/tags) [![license](https://img.shields.io/badge/license-Apache--2.0-blue)](./LICENSE) ![Go](https://img.shields.io/badge/go-1.24-00ADD8?logo=go)
 
 **ubgo/logger is a pluggable, adapter-based, `log/slog`-native structured logging library for Go** — zero-allocation on the hot path, batteries included, and a drop-in upgrade path from `zap`, `zerolog`, `logrus`, `slog`, and `logr`.
 
