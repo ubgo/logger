@@ -112,12 +112,12 @@ func gzipFile(path string) error {
 	if err != nil {
 		return err
 	}
-	defer in.Close()
+	defer func() { _ = in.Close() }()
 	out, err := os.Create(path + ".gz")
 	if err != nil {
 		return err
 	}
-	defer out.Close()
+	defer func() { _ = out.Close() }()
 	zw := gzip.NewWriter(out)
 	if _, err := io.Copy(zw, in); err != nil {
 		_ = zw.Close()

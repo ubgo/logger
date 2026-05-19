@@ -47,8 +47,6 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
-    # Lint is advisory: vet + gofmt + race tests are the hard gates.
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5

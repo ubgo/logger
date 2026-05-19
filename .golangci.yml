@@ -1,10 +1,5 @@
 version: "2"
 
-run:
-  # _test.go files intentionally ignore Close()/Sync() errors on cleanup;
-  # linting them adds noise without catching real bugs.
-  tests: false
-
 linters:
   enable:
     - errcheck
@@ -15,11 +10,20 @@ linters:
     - misspell
   settings:
     errcheck:
-      # Deferred/cleanup Close and best-effort Sync are idiomatic to ignore.
+      # Best-effort Close/Sync on cleanup paths are idiomatic to ignore.
       exclude-functions:
-        - (io.Closer).Close
         - (*github.com/ubgo/logger.Logger).Close
         - (*github.com/ubgo/logger.Logger).Sync
+  exclusions:
+    rules:
+      # Tests and the example intentionally ignore Close/Sync errors on
+      # cleanup; linting that adds noise without catching real bugs. (Tests
+      # are still linted for unused/staticcheck so test-only helpers like
+      # appendNumeric / raceEnabled count as used.)
+      - path: _test\.go
+        linters: [errcheck]
+      - path: example/
+        linters: [errcheck]
 
 issues:
   max-issues-per-linter: 0
