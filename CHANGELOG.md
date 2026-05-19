@@ -4,6 +4,12 @@ All notable changes to this project. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); this project uses semver
 once v1.0.0 is tagged.
 
+## [v0.1.0] — 2026-05-19
+
+First tagged foundation. Zero-allocation typed hot path
+(295 ns/op · 0 B · 0 allocs — verified by a CI alloc-regression gate),
+slogtest-conformant, all four plan phases landed. See sections below.
+
 ## [Unreleased]
 
 ### Added — v1 foundation (Phase 1)

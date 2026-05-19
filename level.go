@@ -45,6 +45,28 @@ func (l Level) String() string {
 // SeverityNumber returns the raw OTEL SeverityNumber.
 func (l Level) SeverityNumber() int { return int(l) }
 
+// lower returns the lowercase band name as a constant string — zero
+// allocation, for the encoder hot path (MarshalText must allocate a []byte to
+// satisfy the interface; encoders must not use it per-record).
+func (l Level) lower() string {
+	switch {
+	case l <= 0:
+		return "unspecified"
+	case l < LevelDebug:
+		return "trace"
+	case l < LevelInfo:
+		return "debug"
+	case l < LevelWarn:
+		return "info"
+	case l < LevelError:
+		return "warn"
+	case l < LevelFatal:
+		return "error"
+	default:
+		return "fatal"
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler (lowercase band name).
 func (l Level) MarshalText() ([]byte, error) {
 	s := l.String()

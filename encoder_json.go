@@ -48,8 +48,7 @@ func (e JSONEncoder) Encode(buf *buffer, r *Record) {
 	if e.NumericLevel {
 		buf.writeInt(int64(r.Level))
 	} else {
-		b, _ := r.Level.MarshalText()
-		buf.writeJSONString(string(b))
+		buf.writeJSONString(r.Level.lower())
 	}
 
 	buf.writeByte(',')

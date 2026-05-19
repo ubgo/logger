@@ -21,6 +21,23 @@ A pluggable, adapter-based, **slog-native** structured logging core for Go — t
 - **Type-safe fields via generics** — `Int[T]`, `Float[T]` store unboxed; only `Any` escapes to reflection.
 - **Per-sink everything** — fan-out where each sink owns its level + encoder, with failure isolation (one dead sink can't kill the others).
 
+## Performance
+
+Typed hot path is **zero-allocation**, enforced by a CI gate
+(`TestZeroAlloc*`), measured on Apple M-series, Go 1.24:
+
+| Path | ns/op | B/op | allocs/op |
+|---|--:|--:|--:|
+| Typed (`String`/`Int[T]`/`Bool` …) | ~295 | 0 | 0 |
+| Disabled level (gated out) | ~7 | 0 | 0 |
+| Through the slog bridge | ~698 | 320 | 1 |
+| stdlib `slog` JSON (reference) | ~704 | 0 | 0 |
+
+The slog-bridge row is the honest *through-bridge* cost (slog's own
+`Record`/attrs allocation for >5 attrs) — published, not hidden, because
+"portable via slog" silently costing 10–40× is the ecosystem's recurring
+trap this library refuses to repeat.
+
 ## Quick start
 
 ```go

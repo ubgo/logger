@@ -42,18 +42,19 @@ func (e ConsoleEncoder) Encode(buf *buffer, r *Record) {
 	buf.b = r.Time.AppendFormat(buf.b, tf)
 	buf.writeByte(' ')
 
-	b, _ := r.Level.MarshalText()
-	lvl := string(b)
-	// pad to 5 for column alignment
-	for len(lvl) < 5 {
-		lvl += " "
+	lvl := r.Level.lower()
+	pad := ""
+	if n := 5 - len(lvl); n > 0 {
+		pad = "     "[:n] // slice of a constant — no alloc
 	}
 	if e.Color {
 		buf.writeString(levelColor(r.Level))
 		buf.writeString(lvl)
+		buf.writeString(pad)
 		buf.writeString("\x1b[0m")
 	} else {
 		buf.writeString(lvl)
+		buf.writeString(pad)
 	}
 
 	buf.writeByte(' ')

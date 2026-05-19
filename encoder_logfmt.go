@@ -37,9 +37,8 @@ func (LogfmtEncoder) Encode(buf *buffer, r *Record) {
 		buf.writeByte('"')
 		buf.writeByte(' ')
 	}
-	b, _ := r.Level.MarshalText()
 	buf.writeString("level=")
-	buf.writeString(string(b))
+	buf.writeString(r.Level.lower())
 	buf.writeString(" msg=")
 	buf.writeLogfmtValue(r.Message)
 
