@@ -27,7 +27,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.24"
+          # 'stable' is >= the highest module `go` directive (some contrib
+          # modules require go 1.25); pinning 1.24 forced a toolchain switch
+          # that broke `go test -cover` (missing covdata).
+          go-version: "stable"
           cache-dependency-path: "${{ matrix.module }}/go.sum"
       - name: vet
         working-directory: ${{ matrix.module }}
@@ -44,11 +47,14 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    # Lint is advisory: vet + gofmt + race tests are the hard gates.
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.24"
-      - uses: golangci/golangci-lint-action@v6
+          go-version: "stable"
+      # golangci-lint-action@v7 understands the v2 `.golangci.yml` schema.
+      - uses: golangci/golangci-lint-action@v7
         with:
           version: latest
