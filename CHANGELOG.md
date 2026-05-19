@@ -12,6 +12,13 @@ slogtest-conformant, all four plan phases landed. See sections below.
 
 ## [Unreleased]
 
+### Added — hot config reload (last planned feature)
+
+- `WatchConfigFile`: zero-dep mtime-poll watcher applying a JSON config's
+  level to a `LevelVar` at startup and on change; missing/invalid file
+  keeps the last good level (graceful, never a silent zero). `OnReload`
+  hook for app-specific knobs.
+
 ### Added — docs & final adapter
 
 - `Example_*` tests (godoc / pkg.go.dev) — compile-checked usage docs
