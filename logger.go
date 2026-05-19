@@ -22,6 +22,7 @@ type Logger struct {
 	with       []Field // inherited fields, prepended to every record
 	addCaller  bool
 	callerSkip int
+	metrics    *Metrics
 }
 
 // Option configures a Logger at construction.
@@ -79,8 +80,13 @@ func New(opts ...Option) *Logger {
 		transport:  c.transport,
 		addCaller:  c.addCaller,
 		callerSkip: c.callerSkip,
+		metrics:    &Metrics{},
 	}
 }
+
+// Metrics returns the logger's self-observability counters (emitted/dropped/
+// sink-errors/by-level). Child loggers from With share the parent's metrics.
+func (l *Logger) Metrics() *Metrics { return l.metrics }
 
 // Enabled reports whether a record at level l would be emitted. Call this to
 // guard expensive field construction.
@@ -118,8 +124,14 @@ func (l *Logger) log(ctx context.Context, level Level, msg string, fields []Fiel
 		r.PC = uint64(pcs[0])
 	}
 	if err := runPipeline(l.processors, ctx, r); err != nil {
+		if l.metrics != nil {
+			l.metrics.incDropped()
+		}
 		r.release() // dropped or failed: do not emit
 		return
+	}
+	if l.metrics != nil {
+		l.metrics.incEmitted(level)
 	}
 	l.transport.Dispatch(r)
 	r.release()

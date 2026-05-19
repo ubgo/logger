@@ -1,5 +1,10 @@
 # ubgo/logger
 
+[![CI](https://github.com/ubgo/logger/actions/workflows/ci.yml/badge.svg)](https://github.com/ubgo/logger/actions/workflows/ci.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/ubgo/logger.svg)](https://pkg.go.dev/github.com/ubgo/logger)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ubgo/logger)](https://goreportcard.com/report/github.com/ubgo/logger)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
+
 A pluggable, adapter-based, **slog-native** structured logging core for Go — the consolidation of the best ideas across the Go, JVM, .NET, Rust, JS and Python logging ecosystems into one coherent, benchmarked package.
 
 > Status: **v1 foundation, in development.** Core pipeline, transports, encoders, sinks and the slog bridge are implemented and race-tested. Sinks/adapters (OTEL, file rotation, zap/logrus shims) and v2 features are tracked in the plan repo.

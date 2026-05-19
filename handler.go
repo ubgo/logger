@@ -147,8 +147,14 @@ func (l *Logger) logAt(ctx context.Context, t time.Time, level Level, msg string
 	}
 	r.Fields = append(r.Fields, fields...)
 	if err := runPipeline(l.processors, ctx, r); err != nil {
+		if l.metrics != nil {
+			l.metrics.incDropped()
+		}
 		r.release()
 		return
+	}
+	if l.metrics != nil {
+		l.metrics.incEmitted(level)
 	}
 	l.transport.Dispatch(r)
 	r.release()
