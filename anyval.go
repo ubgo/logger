@@ -6,6 +6,9 @@ import (
 	"strconv"
 )
 
+// sprintAny renders any value to a string (used by hashing/redaction).
+func sprintAny(v any) string { return fmt.Sprint(v) }
+
 // appendAny handles the kindAny escape hatch. Fast-paths the common scalar
 // types; falls back to encoding/json (JSON mode) or fmt (text mode) for
 // composite values. A marshal failure degrades gracefully to a quoted error
