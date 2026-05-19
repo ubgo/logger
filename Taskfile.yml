@@ -17,6 +17,19 @@ tasks:
       - go test -race -coverprofile=cover.out ./...
       - go tool cover -func=cover.out | tail -1
 
+  cover:
+    desc: Core coverage — total + per-function (writes coverage.out)
+    cmds:
+      - go test -coverprofile=coverage.out ./
+      - go tool cover -func=coverage.out | tail -1
+      - 'go tool cover -func=coverage.out | awk ''$3 ~ /%/ && $3 != "100.0%"'' | sort -k3 -n || true'
+
+  cover:html:
+    desc: Open the line-by-line HTML coverage report
+    cmds:
+      - go test -coverprofile=coverage.out ./
+      - go tool cover -html=coverage.out
+
   bench:
     desc: Run benchmarks (allocs/op is the load-bearing number)
     cmds:
