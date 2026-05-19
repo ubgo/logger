@@ -12,6 +12,20 @@ slogtest-conformant, all four plan phases landed. See sections below.
 
 ## [Unreleased]
 
+### Added — v2 (Phase: differentiators round 2)
+
+- **Spans-as-context** (`StartSpan`/`End`/`Fail`): scoped structured
+  context with an outcome; child logs inherit span identity + fields;
+  Eliot-style hierarchical `span_path` (task_level) so a flat stream
+  reconstructs the causal tree. Single duration+outcome `span.end`
+  record; `End` idempotent.
+- **Message-template preservation** (`Infot`/`Warnt`/`Errort`/`Logt`):
+  Serilog-style `"processed {count} files for {user}"` keeps the
+  template as a stable `msg_template` key, renders the human `msg`, and
+  emits `count`/`user` as structured fields — in one call. `{{`/`}}`
+  escape. Convenience tier (renders a string; typed API stays the
+  zero-alloc path).
+
 ### Added — v1 foundation (Phase 1)
 
 - slog-native core: correct `slog.Handler` passing `testing/slogtest`
