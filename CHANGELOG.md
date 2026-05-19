@@ -20,7 +20,7 @@ slogtest-conformant, all four plan phases landed. See sections below.
 
 ### Testing
 
-- Comprehensive coverage suite: core statement coverage 67% → **87%**,
+- Comprehensive coverage suite: core statement coverage 67% → **91%**,
   all under `-race`, zero-alloc gate still green. Exercises every field
   kind, encoder, level helper, transport accessor, sink (fanout/net/
   http-batch/audit/syslog), processor, template/event/span path, and

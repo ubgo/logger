@@ -24,6 +24,11 @@ linters:
         linters: [errcheck]
       - path: example/
         linters: [errcheck]
+      # Tests intentionally pass a nil context to exercise the library's
+      # documented defensive nil-ctx handling (ctxOr, eventAt, logAt).
+      - path: _test\.go
+        linters: [staticcheck]
+        text: "SA1012"
 
 issues:
   max-issues-per-linter: 0
