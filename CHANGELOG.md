@@ -12,6 +12,16 @@ slogtest-conformant, all four plan phases landed. See sections below.
 
 ## [Unreleased]
 
+### Added — engines & adapters
+
+- **DisruptorTransport**: lock-free async engine — Vyukov bounded MPMC
+  ring (per-slot sequence + CAS, no mutex), one drain goroutine,
+  explicit OverflowPolicy + dropped-count, drains on Close. Race-tested
+  with 8 producers × 2000 records on a 64-slot ring, zero loss.
+- **contrib/zerolog**: forward records through a `zerolog.Logger`.
+- **contrib/logr**: `logr.Logger` backed by ubgo (k8s/controller-runtime
+  code runs on ubgo unchanged); V-level mapping + WithName/WithValues.
+
 ### Added — v2 round 3
 
 - **Events-not-messages** (`Event`/`EventAt`): log a named typed event

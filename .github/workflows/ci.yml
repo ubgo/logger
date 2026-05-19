@@ -19,6 +19,8 @@ jobs:
           - "contrib/logrus"
           - "contrib/zap"
           - "contrib/otel"
+          - "contrib/zerolog"
+          - "contrib/logr"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
