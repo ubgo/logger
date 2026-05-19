@@ -22,6 +22,7 @@ jobs:
           - "contrib/zerolog"
           - "contrib/logr"
           - "contrib/phuslu"
+          - "contrib/sentry"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5

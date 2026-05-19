@@ -12,6 +12,18 @@ slogtest-conformant, all four plan phases landed. See sections below.
 
 ## [Unreleased]
 
+### Added — network + cloud sinks (final scope item)
+
+- `NetSink` (TCP / UDP / TLS) with lazy dial + one-shot re-dial and a
+  dropped counter.
+- `SyslogSink` (Unix build-tagged, RFC 3164/5424 via stdlib, severity
+  mapped).
+- `HTTPBatchSink` primitive + `NewLokiSink` / `NewDatadogSink` /
+  `NewElasticsearchSink` — batched, off-app-path delivery, dropped
+  accounting, zero extra deps.
+- `contrib/sentry`: WARN+ records → Sentry events (errors become
+  exceptions, fields → context).
+
 ### Added — hot config reload (last planned feature)
 
 - `WatchConfigFile`: zero-dep mtime-poll watcher applying a JSON config's
