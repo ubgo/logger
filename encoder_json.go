@@ -56,6 +56,13 @@ func (e JSONEncoder) Encode(buf *buffer, r *Record) {
 	buf.writeByte(':')
 	buf.writeJSONString(r.Message)
 
+	if r.EventName != "" {
+		buf.writeByte(',')
+		buf.writeJSONString("event")
+		buf.writeByte(':')
+		buf.writeJSONString(r.EventName)
+	}
+
 	if src, ok := r.source(); ok {
 		buf.writeByte(',')
 		buf.writeJSONString("caller")

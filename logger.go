@@ -166,6 +166,49 @@ func (l *Logger) Log(ctx context.Context, level Level, msg string, f ...Field) {
 	l.log(ctx, level, msg, f)
 }
 
+// Event logs a named typed event with NO message (mulog "events not
+// messages"): the event name is the primary index — better for analytics and
+// AI consumption than free-form prose. Defaults to Info; use EventAt for a
+// level/ctx.
+func (l *Logger) Event(name string, f ...Field) {
+	l.eventAt(context.Background(), LevelInfo, name, f)
+}
+
+// EventAt logs a named event at an explicit level with context.
+func (l *Logger) EventAt(ctx context.Context, level Level, name string, f ...Field) {
+	l.eventAt(ctx, level, name, f)
+}
+
+func (l *Logger) eventAt(ctx context.Context, level Level, name string, fields []Field) {
+	if level < l.leveler.Level() {
+		return
+	}
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	r := newRecord()
+	r.Time = timeNow()
+	r.Level = level
+	r.EventName = name
+	r.Ctx = ctx
+	if len(l.with) > 0 {
+		r.Fields = append(r.Fields, l.with...)
+	}
+	r.Fields = append(r.Fields, fields...)
+	if err := runPipeline(l.processors, ctx, r); err != nil {
+		if l.metrics != nil {
+			l.metrics.incDropped()
+		}
+		r.release()
+		return
+	}
+	if l.metrics != nil {
+		l.metrics.incEmitted(level)
+	}
+	l.transport.Dispatch(r)
+	r.release()
+}
+
 // Sync flushes buffered records (call before exit).
 func (l *Logger) Sync() error { return l.transport.Sync() }
 

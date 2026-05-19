@@ -12,6 +12,16 @@ slogtest-conformant, all four plan phases landed. See sections below.
 
 ## [Unreleased]
 
+### Added — v2 round 3
+
+- **Events-not-messages** (`Event`/`EventAt`): log a named typed event
+  with no prose; `Record.EventName` (maps to OTEL EventName) is the
+  primary index — analytics/AI friendly.
+- **Tamper-evident audit** (`AuditSink` + `VerifyAudit`): SHA-256 hash
+  chain over `prev || canonical`; detects edits, deletions, and
+  reordering with the failing seq + reason. For provable security/audit
+  logs.
+
 ### Added — v2 (Phase: differentiators round 2)
 
 - **Spans-as-context** (`StartSpan`/`End`/`Fail`): scoped structured
