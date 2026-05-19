@@ -1,0 +1,50 @@
+version: '3'
+
+tasks:
+  build:
+    desc: Compile all packages
+    cmds:
+      - go build ./...
+
+  test:
+    desc: Run tests with the race detector
+    cmds:
+      - go test -race ./...
+
+  test:cover:
+    desc: Run tests with coverage report
+    cmds:
+      - go test -race -coverprofile=cover.out ./...
+      - go tool cover -func=cover.out | tail -1
+
+  bench:
+    desc: Run benchmarks (allocs/op is the load-bearing number)
+    cmds:
+      - go test -bench=. -benchmem -run=^$ ./...
+
+  vet:
+    desc: go vet
+    cmds:
+      - go vet ./...
+
+  lint:
+    desc: golangci-lint (if installed)
+    cmds:
+      - golangci-lint run ./... || echo "golangci-lint not installed; skipped"
+
+  fmt:
+    desc: gofmt the tree
+    cmds:
+      - gofmt -w .
+
+  example:
+    desc: Run the demo
+    cmds:
+      - go run ./example
+
+  check:
+    desc: fmt + vet + race tests (pre-commit gate)
+    cmds:
+      - task: fmt
+      - task: vet
+      - task: test
