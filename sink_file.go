@@ -90,17 +90,21 @@ func (r *RotatingFile) rotateLocked() error {
 		return err
 	}
 	r.size = 0
-	go r.maintain(rotated) // compress + prune off the write path
-	return nil
-}
-
-func (r *RotatingFile) maintain(rotated string) {
+	// Compression is the only slow step → off the write path. Retention
+	// (prune) runs synchronously so MaxBackups/MaxAge are deterministic and
+	// not racy with shutdown.
 	if r.Compress {
-		if err := gzipFile(rotated); err == nil {
-			_ = os.Remove(rotated)
-		}
+		go func() {
+			if err := gzipFile(rotated); err == nil {
+				_ = os.Remove(rotated)
+			}
+			r.mu.Lock()
+			r.prune()
+			r.mu.Unlock()
+		}()
 	}
 	r.prune()
+	return nil
 }
 
 func gzipFile(path string) error {
