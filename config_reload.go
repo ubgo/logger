@@ -21,6 +21,7 @@ type ConfigWatcher struct {
 	path     string
 	lv       *LevelVar
 	interval time.Duration
+	mu       sync.Mutex // guards onReload (set after the goroutine starts)
 	onReload func(FileConfig)
 	stop     chan struct{}
 	once     sync.Once
@@ -42,7 +43,11 @@ func WatchConfigFile(path string, lv *LevelVar, interval time.Duration) (*Config
 
 // OnReload registers a callback invoked with the parsed config on every
 // applied change (for app-specific settings beyond level).
-func (w *ConfigWatcher) OnReload(fn func(FileConfig)) { w.onReload = fn }
+func (w *ConfigWatcher) OnReload(fn func(FileConfig)) {
+	w.mu.Lock()
+	w.onReload = fn
+	w.mu.Unlock()
+}
 
 func (w *ConfigWatcher) run() {
 	t := time.NewTicker(w.interval)
@@ -83,8 +88,11 @@ func (w *ConfigWatcher) apply() {
 	if lvl, ok := parseLevel(c.Level); ok {
 		w.lv.Set(lvl)
 	}
-	if w.onReload != nil {
-		w.onReload(c)
+	w.mu.Lock()
+	cb := w.onReload
+	w.mu.Unlock()
+	if cb != nil {
+		cb(c)
 	}
 }
 

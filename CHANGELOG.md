@@ -12,6 +12,20 @@ slogtest-conformant, all four plan phases landed. See sections below.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Data race in `ConfigWatcher`**: `OnReload` set the callback while the
+  watcher goroutine read it. `onReload` is now mutex-guarded. Found by
+  the new coverage suite under `-race`.
+
+### Testing
+
+- Comprehensive coverage suite: core statement coverage 67% → **87%**,
+  all under `-race`, zero-alloc gate still green. Exercises every field
+  kind, encoder, level helper, transport accessor, sink (fanout/net/
+  http-batch/audit/syslog), processor, template/event/span path, and
+  config-reload.
+
 ### Added — network + cloud sinks (final scope item)
 
 - `NetSink` (TCP / UDP / TLS) with lazy dial + one-shot re-dial and a
